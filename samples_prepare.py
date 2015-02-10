@@ -22,7 +22,7 @@ def do_instrument_blanchet(din, dout):
                     yield n, os.path.join(din, stopdir, f)
     if not os.path.exists(dout):
         os.makedirs(dout)
-    with open(os.path.join(dout, 'pdharpsichord_blanchet1720.txt'), 'w') as out:
+    with open(os.path.join(dout, 'blanchet.txt'), 'w') as out:
         for n, ffin in iterate_through_dir():
             ffout = os.path.join(dout, '%d.wav' % n)
             shutil.move(ffin, ffout)

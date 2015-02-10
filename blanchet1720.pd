@@ -1,31 +1,10 @@
-#N canvas 135 212 605 589 10;
-#N canvas 767 72 860 414 loadsamples 1;
-#X obj 69 207 textfile;
-#X msg 71 132 rewind;
-#X msg 88 107 read hs_samples_def.txt cr;
-#X obj 19 132 metro 5;
-#X msg 19 105 stop;
-#X obj 41 69 t b b b;
-#X obj 69 234 outlet;
-#X obj 408 48 inlet;
-#X text 455 48 bang to load;
-#X text 36 36 old stuff;
-#X connect 0 0 6 0;
-#X connect 0 1 4 0;
-#X connect 1 0 0 0;
-#X connect 2 0 0 0;
-#X connect 3 0 0 0;
-#X connect 4 0 3 0;
-#X connect 5 0 3 0;
-#X connect 5 1 1 0;
-#X connect 5 2 2 0;
-#X restore 24 243 pd loadsamples;
+#N canvas 592 577 1265 630 10;
 #N canvas 641 238 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
-#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 1 1
+#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 0 1
 ;
-#X obj 236 126 tgl 50 0 empty empty L 10 20 0 25 -261682 -1 -1 1 1
+#X obj 236 126 tgl 50 0 empty empty L 10 20 0 25 -261682 -1 -1 0 1
 ;
 #X obj 116 218 route 1 0;
 #X msg 116 245 stopon 0;
@@ -104,23 +83,51 @@
 #X obj 26 146 s stopcontrol_set;
 #X obj 26 11 r stopcontrol_display;
 #X text 326 23 use bottom white keys to toggle stops;
-#X text 217 330 stopcontrol triggers multiple outs depending on the
+#X text 217 310 stopcontrol triggers multiple outs depending on the
 stops that are set \; input is note \, velocity \; output is (several)
 note \, velocity depending on the set stops;
 #X msg 156 374 23 100;
-#X msg 24 219 blanchet;
-#X connect 1 0 12 0;
-#X connect 3 0 4 0;
-#X connect 3 1 4 1;
-#X connect 4 0 11 0;
+#X obj 663 337 sampleplayer~;
+#X obj 725 63 bng 15 250 50 0 empty empty LOAD_INSTRUMENT 17 7 0 10
+-258113 -1 -1;
+#X obj 753 412 dac~;
+#X msg 761 312 memoryusage;
+#X msg 778 233 initialize;
+#X obj 754 189 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X msg 733 115 read blanchet.txt cr;
+#X obj 733 154 textfile;
+#X obj 680 117 delay 1;
+#X msg 779 89 rewind;
+#X obj 814 172 delay 100;
+#X msg 624 205 2 34 100;
+#X connect 0 0 11 0;
+#X connect 2 0 3 0;
+#X connect 2 1 3 1;
+#X connect 3 0 10 0;
+#X connect 4 0 5 0;
+#X connect 4 1 5 1;
+#X connect 4 2 5 2;
 #X connect 5 0 6 0;
-#X connect 5 1 6 1;
-#X connect 5 2 6 2;
-#X connect 6 0 7 0;
-#X connect 7 1 3 0;
-#X connect 8 0 2 0;
-#X connect 8 1 10 0;
-#X connect 9 0 8 0;
-#X connect 13 0 1 0;
-#X connect 16 0 8 0;
-#X connect 17 0 0 0;
+#X connect 6 1 2 0;
+#X connect 7 0 1 0;
+#X connect 7 1 9 0;
+#X connect 8 0 7 0;
+#X connect 12 0 0 0;
+#X connect 15 0 7 0;
+#X connect 16 0 18 0;
+#X connect 16 1 18 1;
+#X connect 17 0 22 0;
+#X connect 17 0 24 0;
+#X connect 17 0 25 0;
+#X connect 19 0 16 0;
+#X connect 20 0 16 0;
+#X connect 21 0 23 0;
+#X connect 22 0 23 0;
+#X connect 23 0 21 0;
+#X connect 23 0 16 0;
+#X connect 23 1 26 0;
+#X connect 24 0 23 0;
+#X connect 25 0 23 0;
+#X connect 26 0 20 0;
+#X connect 27 0 16 0;
