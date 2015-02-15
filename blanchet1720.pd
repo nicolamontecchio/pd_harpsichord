@@ -1,4 +1,4 @@
-#N canvas 1339 162 772 941 10;
+#N canvas 1344 323 772 941 10;
 #N canvas 641 238 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
@@ -87,7 +87,7 @@
 #X obj 427 722 pack f f f;
 #X msg 427 609 \$1 128;
 #X obj 524 537 vsl 15 128 0 1 0 1 empty empty release_intensity 0 -9
-0 10 -204800 -1 -1 11400 1;
+0 10 -204800 -1 -1 12700 1;
 #X floatatom 524 673 5 0 0 0 - - -, f 5;
 #X obj 455 693 - 12;
 #X obj 484 671 *;
@@ -96,6 +96,10 @@
 #X obj 450 797 print qwe;
 #X msg 352 603 clear;
 #X obj 427 644 poly 64 1;
+#X obj 325 862 writesf~ 2;
+#X msg 43 790 open recording.wav;
+#X msg 43 815 start;
+#X msg 43 841 stop;
 #X connect 0 0 4 0;
 #X connect 1 0 23 0;
 #X connect 1 1 23 1;
@@ -103,7 +107,9 @@
 #X connect 2 1 3 0;
 #X connect 5 0 0 0;
 #X connect 6 0 8 0;
+#X connect 6 0 49 0;
 #X connect 6 1 8 1;
+#X connect 6 1 49 1;
 #X connect 7 0 12 0;
 #X connect 7 0 14 0;
 #X connect 7 0 15 0;
@@ -155,3 +161,6 @@
 #X connect 48 0 37 0;
 #X connect 48 1 42 0;
 #X connect 48 2 43 0;
+#X connect 50 0 49 0;
+#X connect 51 0 49 0;
+#X connect 52 0 49 0;
