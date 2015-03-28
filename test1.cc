@@ -29,18 +29,18 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
   float *out = (float*)outputBuffer;
   unsigned int i;
   (void) inputBuffer; /* Prevent unused variable warning. */
- //  for( i=0; i<framesPerBuffer; i++ )
-//   {
-//     *out++ = data->left_phase; /* left */
-//     *out++ = data->right_phase; /* right */
-// /* Generate simple sawtooth phaser that ranges between -1.0 and 1.0. */
-//     data->left_phase += 0.01f;
-// /* When signal reaches top, drop back down. */
-//     if( data->left_phase >= 1.0f ) data->left_phase -= 2.0f;
-// /* higher pitch so we can distinguish left and right. */
-//     data->right_phase += 0.03f;
-//     if( data->right_phase >= 1.0f ) data->right_phase -= 2.0f;
-//   }
+  for( i=0; i<framesPerBuffer; i++ )
+  {
+    *out++ = data->left_phase; /* left */
+    *out++ = data->right_phase; /* right */
+/* Generate simple sawtooth phaser that ranges between -1.0 and 1.0. */
+    data->left_phase += 0.01f;
+/* When signal reaches top, drop back down. */
+    if( data->left_phase >= 1.0f ) data->left_phase -= 2.0f;
+/* higher pitch so we can distinguish left and right. */
+    data->right_phase += 0.03f;
+    if( data->right_phase >= 1.0f ) data->right_phase -= 2.0f;
+  }
   libpd_process_float(1, (float *) inputBuffer, (float *) outputBuffer);
   return 0;
 }
@@ -91,7 +91,8 @@ int main(int argc, char **argv)
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
   PaStream *stream;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
+  paTestData data;
+  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &data);
   Pa_StartStream( stream );
 
 
