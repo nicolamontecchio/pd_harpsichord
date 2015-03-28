@@ -82,7 +82,6 @@ int main(int argc, char **argv)
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
   PaStream *stream;
-  // paTestData data;
   Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
   Pa_StartStream( stream );
 
@@ -90,16 +89,8 @@ int main(int argc, char **argv)
 
   Pa_StopStream( stream );
   Pa_CloseStream( stream );
+  Pa_Terminate();
 
   libpd_closefile(patch);
 
 }
-
-
-
-//   err = Pa_Terminate();
-//   if( err != paNoError )
-//   {
-//     printf( "PortAudio error: %s\n", Pa_GetErrorText( err ) );
-//     return 1;
-//   }
