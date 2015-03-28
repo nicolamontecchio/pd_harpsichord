@@ -7,11 +7,11 @@
 using namespace std;
 
 
-typedef struct
-{
-  float left_phase;
-  float right_phase;
-} paTestData;
+// typedef struct
+// {
+//   float left_phase;
+//   float right_phase;
+// } paTestData;
 
 
 /* This routine will be called by the PortAudio engine when audio is needed.
@@ -27,21 +27,7 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 /* Cast data passed through stream to our structure. */
   paTestData *data = (paTestData*)userData;
   float *out = (float*)outputBuffer;
-  unsigned int i;
-  (void) inputBuffer; /* Prevent unused variable warning. */
-  for( i=0; i<framesPerBuffer; i++ )
-  {
-    *out++ = data->left_phase; /* left */
-    *out++ = data->right_phase; /* right */
-/* Generate simple sawtooth phaser that ranges between -1.0 and 1.0. */
-    data->left_phase += 0.01f;
-/* When signal reaches top, drop back down. */
-    if( data->left_phase >= 1.0f ) data->left_phase -= 2.0f;
-/* higher pitch so we can distinguish left and right. */
-    data->right_phase += 0.03f;
-    if( data->right_phase >= 1.0f ) data->right_phase -= 2.0f;
-  }
-  libpd_process_float(1, (float *) inputBuffer, (float *) outputBuffer);
+  libpd_process_float(1, NULL, out);
   return 0;
 }
 
@@ -67,6 +53,11 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  // dsp on (?)
+  libpd_start_message(1); // one entry in list
+  libpd_add_float(1.0f);
+  libpd_finish_message("pd", "dsp");
+
   // try to open the test patch
   void *patch = libpd_openfile("libpdtestpatch.pd", ".");
   printf("patch file opened; handle: %d\n", patch);
@@ -91,23 +82,16 @@ int main(int argc, char **argv)
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
   PaStream *stream;
-  paTestData data;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &data);
+  // paTestData data;
+  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
   Pa_StartStream( stream );
-
 
   Pa_Sleep(3*1000);
 
   Pa_StopStream( stream );
   Pa_CloseStream( stream );
 
-
-
   libpd_closefile(patch);
-
-
-
-
 
 }
 
