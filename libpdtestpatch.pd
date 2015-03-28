@@ -1,0 +1,12 @@
+#N canvas 650 373 450 300 10;
+#X obj 101 194 print;
+#X msg 145 150 hello;
+#X obj 145 119 r fufi;
+#X obj 321 118 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 321 138 s fufi;
+#X obj 206 195 s gnappo;
+#X connect 1 0 0 0;
+#X connect 1 0 5 0;
+#X connect 2 0 1 0;
+#X connect 3 0 4 0;
