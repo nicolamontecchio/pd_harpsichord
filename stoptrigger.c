@@ -3,7 +3,7 @@
 
 t_class *stoptrigger_class;
 
-const int MAX_STOPS  = 256;
+#define MAX_STOPS 256
 const int NOTE_DELTA = 256; // first stop in range 0...NOTE_BASE-1, second in NOTE_BASE...2*NOTE_BASE-1, ...
 
 typedef struct stoptrigger
