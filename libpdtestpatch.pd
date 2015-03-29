@@ -1,4 +1,4 @@
-#N canvas 650 373 450 300 10;
+#N canvas 469 521 450 300 10;
 #X obj 101 194 print;
 #X msg 145 150 hello;
 #X obj 145 119 r fufi;
@@ -6,11 +6,15 @@
 -1 -1;
 #X obj 321 138 s fufi;
 #X obj 206 195 s gnappo;
-#X obj 302 201 osc~ 220;
 #X obj 302 239 dac~;
+#X obj 361 204 +~ 300;
+#X obj 302 201 osc~;
+#X obj 354 165 osc~ 6;
 #X connect 1 0 0 0;
 #X connect 1 0 5 0;
 #X connect 2 0 1 0;
 #X connect 3 0 4 0;
-#X connect 6 0 7 0;
-#X connect 6 0 7 1;
+#X connect 7 0 8 0;
+#X connect 8 0 6 0;
+#X connect 8 0 6 1;
+#X connect 9 0 7 0;
