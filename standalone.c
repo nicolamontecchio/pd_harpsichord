@@ -1,10 +1,8 @@
-#include <iostream>
 #include <portaudio.h>
 #include <stdio.h>
 #include <strings.h>
 #include <cstdlib>
 #include <z_libpd.h>
-using namespace std;
 
 
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
