@@ -5,12 +5,25 @@
 #include <portaudio.h>
 #include <portmidi.h>
 
+const int MIDI_BUFFER_LEN = 1000;
+
+typedef struct
+{
+  PortMidiStream *midi_stream;
+  PmEvent *midi_event_buffer;
+} callback_data;
+
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   unsigned long framesPerBuffer,
 			   const PaStreamCallbackTimeInfo* timeInfo,
 			   PaStreamCallbackFlags statusFlags,
 			   void *userData )
 {
+  callback_data *cdata = (callback_data *) cdata;
+  /* int n_midi_ev_read = Pm_Read(cdata->midi_stream, cdata->midi_event_buffer, MIDI_BUFFER_LEN); */
+  /* for(int i = 0; i < n_midi_ev_read; i++) */
+    /* printf("midi event: %d\n", cdata->midi_event_buffer[i].message); */
+
   float *out = (float*)outputBuffer;
   libpd_process_float(1, NULL, out);
   return 0;
@@ -28,6 +41,9 @@ int main(int argc, char **argv)
 {
   int audio_device_num = atoi(argv[1]);
   int midi_device_num = atoi(argv[2]);
+  PortMidiStream *midi_stream;
+  callback_data cdata;
+  cdata.midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
 
   libpd_set_printhook(pdprint);
   // libpd_set_messagehook(pdmessage); //NOPE
@@ -72,7 +88,12 @@ int main(int argc, char **argv)
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
   PaStream *stream;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
+  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &cdata);
+
+  Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL);
+  cdata.midi_stream = midi_stream;
+
+
   Pa_StartStream( stream );
 
   Pa_Sleep(5*1000);
@@ -81,7 +102,9 @@ int main(int argc, char **argv)
   Pa_CloseStream( stream );
   Pa_Terminate();
 
+  Pm_Close(midi_stream);
   Pm_Terminate();
+  free(cdata.midi_event_buffer);
 
   libpd_closefile(patch);
 
