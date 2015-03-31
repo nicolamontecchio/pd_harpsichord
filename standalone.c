@@ -20,10 +20,13 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   void *userData )
 {
   callback_data *cdata = (callback_data *) cdata;
-  /* int n_midi_ev_read = Pm_Read(cdata->midi_stream, cdata->midi_event_buffer, MIDI_BUFFER_LEN); */
-  /* for(int i = 0; i < n_midi_ev_read; i++) */
-    /* printf("midi event: %d\n", cdata->midi_event_buffer[i].message); */
-
+  if(Pm_Poll(cdata->midi_stream))
+  {
+    printf("qweqwe\n");
+    int n_midi_ev_read = Pm_Read(cdata->midi_stream, cdata->midi_event_buffer, MIDI_BUFFER_LEN);
+    for(int i = 0; i < n_midi_ev_read; i++)
+      printf("midi event: %d\n", cdata->midi_event_buffer[i].message);
+  }
   float *out = (float*)outputBuffer;
   libpd_process_float(1, NULL, out);
   return 0;
