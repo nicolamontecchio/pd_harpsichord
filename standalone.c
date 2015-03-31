@@ -1,9 +1,9 @@
-#include <portaudio.h>
 #include <stdio.h>
 #include <strings.h>
 #include <cstdlib>
 #include <z_libpd.h>
-
+#include <portaudio.h>
+#include <portmidi.h>
 
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   unsigned long framesPerBuffer,
@@ -26,6 +26,8 @@ void pdprint(const char *s) {
 
 int main(int argc, char **argv)
 {
+  int audio_device_num = atoi(argv[1]);
+  int midi_device_num = atoi(argv[2]);
 
   libpd_set_printhook(pdprint);
   // libpd_set_messagehook(pdmessage); //NOPE
@@ -52,29 +54,34 @@ int main(int argc, char **argv)
 
   printf("PD tick size: %d\n", pd_tick_size);
 
-  // alsa stuff
-  int deviceNum = atoi(argv[1]);
+  Pm_Initialize();
   Pa_Initialize();
+  const PmDeviceInfo    *midi_device_info  = Pm_GetDeviceInfo(midi_device_num);
+  const PaDeviceInfo    *audio_device_info = Pa_GetDeviceInfo(audio_device_num);
 
+  printf("using audio device [%d]: %s\n", audio_device_num, audio_device_info->name);
+  printf("using midi device  [%d]: %s\n", midi_device_num, midi_device_info->name);
 
   PaStreamParameters outputParameters;
   bzero( &outputParameters, sizeof( outputParameters ) ); //not necessary if you are filling in all the fields
   outputParameters.channelCount = 2;
-  outputParameters.device = deviceNum;
+  outputParameters.device = audio_device_num;
   outputParameters.hostApiSpecificStreamInfo = NULL;
   outputParameters.sampleFormat = paFloat32;
-  outputParameters.suggestedLatency = Pa_GetDeviceInfo(deviceNum)->defaultLowOutputLatency ;
+  outputParameters.suggestedLatency = Pa_GetDeviceInfo(audio_device_num)->defaultLowOutputLatency ;
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
   PaStream *stream;
   Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
   Pa_StartStream( stream );
 
-  Pa_Sleep(3*1000);
+  Pa_Sleep(5*1000);
 
   Pa_StopStream( stream );
   Pa_CloseStream( stream );
   Pa_Terminate();
+
+  Pm_Terminate();
 
   libpd_closefile(patch);
 
