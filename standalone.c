@@ -20,13 +20,6 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   void *userData )
 {
   callback_data *cdata = (callback_data *) cdata;
-  if(Pm_Poll(cdata->midi_stream))
-  {
-    printf("qweqwe\n");
-    int n_midi_ev_read = Pm_Read(cdata->midi_stream, cdata->midi_event_buffer, MIDI_BUFFER_LEN);
-    for(int i = 0; i < n_midi_ev_read; i++)
-      printf("midi event: %d\n", cdata->midi_event_buffer[i].message);
-  }
   float *out = (float*)outputBuffer;
   libpd_process_float(1, NULL, out);
   return 0;
@@ -90,16 +83,23 @@ int main(int argc, char **argv)
   outputParameters.suggestedLatency = Pa_GetDeviceInfo(audio_device_num)->defaultLowOutputLatency ;
   outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
 
-  PaStream *stream;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &cdata);
-
   Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL);
   cdata.midi_stream = midi_stream;
 
+  PaStream *stream;
+  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &cdata);
 
   Pa_StartStream( stream );
 
   Pa_Sleep(5*1000);
+
+  if(Pm_Poll(cdata.midi_stream))
+  {
+    printf("qweqwe\n");
+    int n_midi_ev_read = Pm_Read(cdata.midi_stream, cdata.midi_event_buffer, MIDI_BUFFER_LEN);
+    for(int i = 0; i < n_midi_ev_read; i++)
+      printf("midi event: %d\n", cdata.midi_event_buffer[i].message);
+  }
 
   Pa_StopStream( stream );
   Pa_CloseStream( stream );

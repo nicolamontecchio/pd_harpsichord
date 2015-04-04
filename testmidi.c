@@ -28,7 +28,6 @@ int main(int argc, char **argv)
 	int data3  = ((msg.message >> 24) & 0xff);
 	int msgtype = ((status & 0xf0) == 0xf0 ?
 		       status : (status & 0xf0));
-
 	/* printf("timestamp: %d -- message: %d\n", msg_buffer[i].timestamp, msg_buffer[i].message); */
 	switch(msgtype)
 	{
