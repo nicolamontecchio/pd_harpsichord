@@ -6,12 +6,14 @@
 #include <portmidi.h>
 
 const int MIDI_BUFFER_LEN = 1000;
+const int MIDINOTEOFF = 0x80;
+const int MIDINOTEON = 0x90;
 
-typedef struct
-{
-  PortMidiStream *midi_stream;
-  PmEvent *midi_event_buffer;
-} callback_data;
+/* typedef struct */
+/* { */
+/*   PortMidiStream *midi_stream; */
+/*   PmEvent *midi_event_buffer; */
+/* } callback_data; */
 
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   unsigned long framesPerBuffer,
@@ -19,7 +21,7 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   PaStreamCallbackFlags statusFlags,
 			   void *userData )
 {
-  callback_data *cdata = (callback_data *) cdata;
+  /* callback_data *cdata = (callback_data *) cdata; */
   float *out = (float*)outputBuffer;
   libpd_process_float(1, NULL, out);
   return 0;
@@ -38,8 +40,8 @@ int main(int argc, char **argv)
   int audio_device_num = atoi(argv[1]);
   int midi_device_num = atoi(argv[2]);
   PortMidiStream *midi_stream;
-  callback_data cdata;
-  cdata.midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
+  /* callback_data cdata; */
+  PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
 
   libpd_set_printhook(pdprint);
   // libpd_set_messagehook(pdmessage); //NOPE
@@ -75,31 +77,51 @@ int main(int argc, char **argv)
   printf("using midi device  [%d]: %s\n", midi_device_num, midi_device_info->name);
 
   PaStreamParameters outputParameters;
-  bzero( &outputParameters, sizeof( outputParameters ) ); //not necessary if you are filling in all the fields
+  bzero( &outputParameters, sizeof( outputParameters ) );
   outputParameters.channelCount = 2;
   outputParameters.device = audio_device_num;
   outputParameters.hostApiSpecificStreamInfo = NULL;
   outputParameters.sampleFormat = paFloat32;
   outputParameters.suggestedLatency = Pa_GetDeviceInfo(audio_device_num)->defaultLowOutputLatency ;
-  outputParameters.hostApiSpecificStreamInfo = NULL; //See you specific host's API docs for info on using this field
+  outputParameters.hostApiSpecificStreamInfo = NULL;
 
   Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL);
-  cdata.midi_stream = midi_stream;
+  /* cdata.midi_stream = midi_stream; */
 
   PaStream *stream;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, &cdata);
+  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
 
   Pa_StartStream( stream );
 
-  Pa_Sleep(5*1000);
-
-  if(Pm_Poll(cdata.midi_stream))
+  do
   {
-    printf("qweqwe\n");
-    int n_midi_ev_read = Pm_Read(cdata.midi_stream, cdata.midi_event_buffer, MIDI_BUFFER_LEN);
-    for(int i = 0; i < n_midi_ev_read; i++)
-      printf("midi event: %d\n", cdata.midi_event_buffer[i].message);
-  }
+    if(Pm_Poll(midi_stream))
+    {
+      int n_midi_ev_read = Pm_Read(midi_stream, midi_event_buffer, MIDI_BUFFER_LEN);
+      /* printf("read %d events\n", n_midi_ev_read); */
+      for(int i = 0; i < n_midi_ev_read; i++)
+      {
+	PmEvent msg = midi_event_buffer[i];
+	int status = Pm_MessageStatus(msg.message);
+	int data1  = Pm_MessageData1(msg.message);
+	int data2  = Pm_MessageData2(msg.message);
+	int data3  = ((msg.message >> 24) & 0xff);
+	int msgtype = ((status & 0xf0) == 0xf0 ?
+		       status : (status & 0xf0));
+	switch(msgtype)
+	{
+	case MIDINOTEON:
+	case MIDINOTEOFF:
+	  /* printf("note off: %d %d\n", data1, data2); */
+	  libpd_noteon(1, data1, data2);
+	  break;
+	default:
+	  printf("wtf\n");
+	}
+      }
+    }
+    Pa_Sleep(2);
+  } while(1);
 
   Pa_StopStream( stream );
   Pa_CloseStream( stream );
@@ -107,8 +129,7 @@ int main(int argc, char **argv)
 
   Pm_Close(midi_stream);
   Pm_Terminate();
-  free(cdata.midi_event_buffer);
+  free(midi_event_buffer);
 
   libpd_closefile(patch);
-
 }
