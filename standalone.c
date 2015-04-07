@@ -40,11 +40,10 @@ int main(int argc, char **argv)
   int audio_device_num = atoi(argv[1]);
   int midi_device_num = atoi(argv[2]);
   PortMidiStream *midi_stream;
-  /* callback_data cdata; */
+  PaStream *audio_stream;
   PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
 
   libpd_set_printhook(pdprint);
-  // libpd_set_messagehook(pdmessage); //NOPE
   libpd_init();
 
   int init_err = libpd_init_audio(0, 2, 44100); // 0 in, 2 out, 44kHz
@@ -59,14 +58,11 @@ int main(int argc, char **argv)
   libpd_add_float(1.0f);
   libpd_finish_message("pd", "dsp");
 
-  // try to open the test patch
   void *patch = libpd_openfile("libpdtestpatch.pd", ".");
   printf("patch file opened; handle: %d\n", patch);
   libpd_bang("fufi");
 
   int pd_tick_size = libpd_blocksize();
-
-  printf("PD tick size: %d\n", pd_tick_size);
 
   Pm_Initialize();
   Pa_Initialize();
@@ -86,19 +82,14 @@ int main(int argc, char **argv)
   outputParameters.hostApiSpecificStreamInfo = NULL;
 
   Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL);
-  /* cdata.midi_stream = midi_stream; */
-
-  PaStream *stream;
-  Pa_OpenStream( &stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
-
-  Pa_StartStream( stream );
+  Pa_OpenStream( &audio_stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
+  Pa_StartStream( audio_stream );
 
   do
   {
     if(Pm_Poll(midi_stream))
     {
       int n_midi_ev_read = Pm_Read(midi_stream, midi_event_buffer, MIDI_BUFFER_LEN);
-      /* printf("read %d events\n", n_midi_ev_read); */
       for(int i = 0; i < n_midi_ev_read; i++)
       {
 	PmEvent msg = midi_event_buffer[i];
@@ -123,8 +114,8 @@ int main(int argc, char **argv)
     Pa_Sleep(2);
   } while(1);
 
-  Pa_StopStream( stream );
-  Pa_CloseStream( stream );
+  Pa_StopStream( audio_stream );
+  Pa_CloseStream( audio_stream );
   Pa_Terminate();
 
   Pm_Close(midi_stream);
