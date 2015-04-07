@@ -6,14 +6,9 @@
 #include <portmidi.h>
 
 const int MIDI_BUFFER_LEN = 1000;
-const int MIDINOTEOFF = 0x80;
-const int MIDINOTEON = 0x90;
-
-/* typedef struct */
-/* { */
-/*   PortMidiStream *midi_stream; */
-/*   PmEvent *midi_event_buffer; */
-/* } callback_data; */
+const int MIDINOTEOFF     = 0x80;
+const int MIDINOTEON      = 0x90;
+const int SAMPLE_RATE     = 44100;
 
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   unsigned long framesPerBuffer,
@@ -21,14 +16,13 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   PaStreamCallbackFlags statusFlags,
 			   void *userData )
 {
-  /* callback_data *cdata = (callback_data *) cdata; */
   float *out = (float*)outputBuffer;
   libpd_process_float(1, NULL, out);
   return 0;
 }
 
 
-#define SAMPLE_RATE (44100)
+
 
 void pdprint(const char *s) {
   printf("%s", s);
@@ -54,7 +48,7 @@ int main(int argc, char **argv)
   }
 
   // dsp on (?)
-  libpd_start_message(1); // one entry in list
+  libpd_start_message(1);
   libpd_add_float(1.0f);
   libpd_finish_message("pd", "dsp");
 
@@ -103,7 +97,6 @@ int main(int argc, char **argv)
 	{
 	case MIDINOTEON:
 	case MIDINOTEOFF:
-	  /* printf("note off: %d %d\n", data1, data2); */
 	  libpd_noteon(1, data1, data2);
 	  break;
 	default:
