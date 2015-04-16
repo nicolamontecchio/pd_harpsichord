@@ -22,10 +22,15 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
 }
 
 
-
-
 void pdprint(const char *s) {
   printf("%s", s);
+}
+
+
+void flip_register(int reg) {
+  libpd_start_message(10);
+  libpd_add_float(reg);
+  libpd_finish_message("stopcontrol_set", "stoptoggle");
 }
 
 
@@ -54,7 +59,8 @@ int main(int argc, char **argv)
 
   void *patch = libpd_openfile("blanchet1720.pd", ".");
   printf("patch file opened; handle: %d\n", patch);
-  libpd_bang("fufi");
+
+  flip_register(0); // turn 8' on by default
 
   int pd_tick_size = libpd_blocksize();
 

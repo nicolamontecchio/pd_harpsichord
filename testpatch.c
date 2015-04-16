@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     libpd_set_printhook(pdprint);
     libpd_init();
     void *patch = libpd_openfile(argv[1], ".");
-    printf("patch file opened; handle: %d\n", patch);
+    printf("patch file opened; handle: %d\n", (int) patch);
     libpd_closefile(patch);
     return 0;
   }
