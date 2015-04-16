@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   libpd_add_float(1.0f);
   libpd_finish_message("pd", "dsp");
 
-  void *patch = libpd_openfile("libpdtestpatch.pd", ".");
+  void *patch = libpd_openfile("blanchet1720.pd", ".");
   printf("patch file opened; handle: %d\n", patch);
   libpd_bang("fufi");
 

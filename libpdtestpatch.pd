@@ -1,4 +1,4 @@
-#N canvas 954 566 516 469 10;
+#N canvas 461 157 516 469 10;
 #X obj 171 306 print;
 #X msg 215 262 hello;
 #X obj 215 231 r fufi;
