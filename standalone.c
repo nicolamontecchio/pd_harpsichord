@@ -102,8 +102,10 @@ int main(int argc, char **argv)
 	switch(msgtype)
 	{
 	case MIDINOTEON:
-	case MIDINOTEOFF:
 	  libpd_noteon(1, data1, data2);
+	  break;
+	case MIDINOTEOFF:
+	  libpd_noteon(1, data1, 0);
 	  break;
 	default:
 	  printf("wtf\n");
