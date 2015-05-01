@@ -57,7 +57,9 @@ void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
   t_mraagpio *x = (t_mraagpio *)pd_new(mraagpio_class);
   x->n_pins = argc;
   x->pins = malloc(sizeof(int) * argc);
+#ifdef EDISON
   x->gpios = malloc(sizeof(mraa_gpio_context) * argc);
+#endif
   for(int i = 0; i < argc; i++)
   {
     if(argv[i].a_type == A_FLOAT)

@@ -1,6 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <strings.h>
-#include <cstdlib>
 #include <z_libpd.h>
 #include <portaudio.h>
 #include <portmidi.h>
