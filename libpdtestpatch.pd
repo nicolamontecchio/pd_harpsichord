@@ -17,7 +17,7 @@
 #X obj 53 314 *~;
 #X obj 55 353 /~ 128;
 #X obj 55 375 dac~;
-#X obj 258 87 mraagpio;
+#X obj 258 87 mraagpio 3 5 1;
 #X connect 1 0 0 0;
 #X connect 1 0 5 0;
 #X connect 2 0 1 0;
