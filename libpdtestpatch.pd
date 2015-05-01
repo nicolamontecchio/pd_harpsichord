@@ -18,6 +18,7 @@
 #X obj 55 353 /~ 128;
 #X obj 55 375 dac~;
 #X obj 258 87 mraagpio 3 5 1;
+#X obj 280 139 print;
 #X connect 1 0 0 0;
 #X connect 1 0 5 0;
 #X connect 2 0 1 0;
@@ -34,3 +35,4 @@
 #X connect 14 0 15 0;
 #X connect 15 0 16 0;
 #X connect 15 0 16 1;
+#X connect 17 0 18 0;

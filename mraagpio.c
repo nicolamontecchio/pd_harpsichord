@@ -8,14 +8,24 @@ typedef struct _mraagpio
 {
   t_object x_obj;
   t_clock *x_clock;
-  int *pins;
   int n_pins;
+  int *pins;
+  t_outlet *outlet_registers;
 } t_mraagpio;
 
 void mraagpio_tick(t_mraagpio *x)
 {
-  post("tick");
+  // simulate randomly for now
+  int r = (rand() / 2) % 8;
+  t_atom *output = malloc(sizeof(t_atom) * x->n_pins);
+  for (int i = 0; i < x->n_pins; i++)
+  {
+    SETFLOAT(output+i, r % 2);
+    r /= 2;
+  }
 
+  outlet_list(x->outlet_registers, &s_list, x->n_pins, output);
+  free(output);
   clock_delay(x->x_clock, 100);
 }
 
@@ -41,7 +51,7 @@ void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
     }
   }
   x->x_clock = clock_new(x, (t_method)mraagpio_tick);
-  outlet_new(&x->x_obj, gensym("bang"));
+  x->outlet_registers = outlet_new(&x->x_obj, &s_anything);
   clock_delay(x->x_clock, 100);
   return (x);
 }
