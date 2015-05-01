@@ -4,4 +4,4 @@ mac :
 
 edison :
 	cc -std=c99 -march=native -O3 -shared -undefined=dynamic_lookup -o stoptrigger.so stoptrigger.c
-	cc -std=c99 -march=native -O3 -shared -undefined=dynamic_lookup -o mraagpio.so mraagpio.c
+	cc -std=c99 -march=native -O3 -shared -undefined=dynamic_lookup -D EDISON -lmraa -o mraagpio.so mraagpio.c
