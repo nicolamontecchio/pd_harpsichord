@@ -5,7 +5,7 @@
 
 
 void pdprint(const char *s) {
-  printf("%s\n", s);
+  printf("%s", s);
   fflush(stdout);
 }
 
@@ -25,10 +25,16 @@ int main(int argc, char **argv)
     libpd_add_float(1.0f);
     libpd_finish_message("pd", "dsp");
 
+    libpd_start_message(1);
+    libpd_add_float(1.0);
+    libpd_finish_message("fufi", "bang");
+
+
+
     void *patch = libpd_openfile(argv[1], ".");
     printf("patch file opened; handle: %d\n", (int) patch);
-    while(1)
-      sleep(10);
+    /* while(1) */
+    /*   sleep(10); */
     libpd_closefile(patch);
     return 0;
   }

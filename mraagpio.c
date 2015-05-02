@@ -21,25 +21,25 @@ typedef struct _mraagpio
 
 void mraagpio_tick(t_mraagpio *x)
 {
-  t_atom *output = malloc(sizeof(t_atom) * x->n_pins);
 #ifdef EDISON
+  t_atom *output = malloc(sizeof(t_atom) * x->n_pins);
   for (int i = 0; i < x->n_pins; i++)
   {
     int status = mraa_gpio_read(x->gpios[i]);
     SETFLOAT(output + i, status);
   }
-#else
-  // simulate randomly
-  int r = (rand() / 2) % 8;
-  for (int i = 0; i < x->n_pins; i++)
-  {
-    SETFLOAT(output+i, r % 2);
-    r /= 2;
-  }
-#endif
   outlet_list(x->outlet_registers, &s_list, x->n_pins, output);
   free(output);
-  clock_delay(x->x_clock, 100);
+#else
+  /* // simulate randomly */
+  /* int r = (rand() / 2) % 8; */
+  /* for (int i = 0; i < x->n_pins; i++) */
+  /* { */
+  /*   SETFLOAT(output+i, r % 2); */
+  /*   r /= 2; */
+  /* } */
+#endif
+  clock_delay(x->x_clock, 1500);
 }
 
 void mraagpio_free(t_mraagpio *x)
