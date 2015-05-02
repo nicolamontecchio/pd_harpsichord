@@ -8,5 +8,5 @@ mac :
 edison :
 	cc -std=c99 -march=native -O3 -shared -undefined=dynamic_lookup -o stoptrigger.so stoptrigger.c
 	cc -std=c99 -march=native -O3 -shared -undefined=dynamic_lookup -D EDISON -lmraa -o mraagpio.so mraagpio.c
-	# TODO listdevices with alsa instead of portmidi
+	cc -D EDISON -lportaudio -lasound -o listdevices -O2 listdevices.c
 	# TODO standalone with alsa instead of portmidi
