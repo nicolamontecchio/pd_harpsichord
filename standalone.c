@@ -85,7 +85,12 @@ int main(int argc, char **argv)
   Pa_StartStream( audio_stream );
 
 #ifdef EDISON
-  // TODO COMPLETE
+  char portname[32];
+  sprintf(portname, "hw:%d", midi_device_num);
+  snd_ctl_t *ctl;
+  snd_ctl_open(&ctl, portname, 0);
+  snd_rawmidi_t* midiin = NULL;
+  snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_SYNC);
 #else
   PortMidiStream *midi_stream;
   PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
@@ -134,7 +139,9 @@ int main(int argc, char **argv)
   Pa_Terminate();
 
 #ifdef EDISON
-  // TODO COMPLETE
+
+  snd_rawmidi_close(midiin);
+  snd_ctl_close(ctl);
 #else
   Pm_Close(midi_stream);
   Pm_Terminate();
