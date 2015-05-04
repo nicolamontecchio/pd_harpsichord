@@ -1,6 +1,6 @@
 #include <alsa/asoundlib.h>
 
-const int CARD = 1;
+const int CARD = 2;
 
 int main(int argc, char *argv[])
 {
