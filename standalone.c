@@ -3,7 +3,12 @@
 #include <strings.h>
 #include <z_libpd.h>
 #include <portaudio.h>
-/* #include <portmidi.h> */
+#ifdef EDISON
+#include <alsa/asoundlib.h>
+#else
+#include <portmidi.h>
+#endif
+
 
 const int MIDI_BUFFER_LEN = 1000;
 const int MIDINOTEOFF     = 0x80;
@@ -38,9 +43,7 @@ int main(int argc, char **argv)
 {
   int audio_device_num = atoi(argv[1]);
   int midi_device_num = atoi(argv[2]);
-  /* PortMidiStream *midi_stream; */
   PaStream *audio_stream;
-  /* PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN); */
 
   libpd_set_printhook(pdprint);
   libpd_init();
@@ -64,13 +67,10 @@ int main(int argc, char **argv)
 
   int pd_tick_size = libpd_blocksize();
 
-  /* Pm_Initialize(); */
   Pa_Initialize();
-  /* const PmDeviceInfo    *midi_device_info  = Pm_GetDeviceInfo(midi_device_num); */
   const PaDeviceInfo    *audio_device_info = Pa_GetDeviceInfo(audio_device_num);
-
   printf("using audio device [%d]: %s\n", audio_device_num, audio_device_info->name);
-  /* printf("using midi device  [%d]: %s\n", midi_device_num, midi_device_info->name); */
+
 
   PaStreamParameters outputParameters;
   bzero( &outputParameters, sizeof( outputParameters ) );
@@ -81,9 +81,15 @@ int main(int argc, char **argv)
   outputParameters.suggestedLatency = Pa_GetDeviceInfo(audio_device_num)->defaultLowOutputLatency ;
   outputParameters.hostApiSpecificStreamInfo = NULL;
 
-  /* Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL); */
   Pa_OpenStream( &audio_stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
   Pa_StartStream( audio_stream );
+
+  /* PortMidiStream *midi_stream; */
+  /* PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN); */
+  /* Pm_Initialize(); */
+  /* const PmDeviceInfo    *midi_device_info  = Pm_GetDeviceInfo(midi_device_num); */
+  /* printf("using midi device  [%d]: %s\n", midi_device_num, midi_device_info->name); */
+  /* Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL); */
 
   do
   {
