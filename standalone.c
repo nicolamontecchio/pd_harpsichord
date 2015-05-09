@@ -113,7 +113,7 @@ int main(int argc, char **argv)
   do
   {
 #ifdef EDISON
-    // TODO COMPLETE
+
 #else
     if(Pm_Poll(midi_stream))
     {
