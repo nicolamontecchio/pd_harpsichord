@@ -15,6 +15,16 @@ const int MIDINOTEOFF     = 0x80;
 const int MIDINOTEON      = 0x90;
 const int SAMPLE_RATE     = 44100;
 
+
+int stop = 0;
+
+void sighandler(int dum)
+{
+  printf("setting stop flag\n");
+  stop=1;
+}
+
+
 static int patestCallback( const void *inputBuffer, void *outputBuffer,
 			   unsigned long framesPerBuffer,
 			   const PaStreamCallbackTimeInfo* timeInfo,
@@ -132,7 +142,7 @@ int main(int argc, char **argv)
     }
 #endif
     Pa_Sleep(2);
-  } while(1);
+  } while(!stop);
 
   Pa_StopStream( audio_stream );
   Pa_CloseStream( audio_stream );
