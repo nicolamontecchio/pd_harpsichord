@@ -101,6 +101,7 @@ int main(int argc, char **argv)
   snd_ctl_open(&ctl, portname, 0);
   snd_rawmidi_t* midiin = NULL;
   snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_NONBLOCK);
+  char buffer;
   int note_cycle = 0; // in [0,3)
   int note_message[3];
 #else
@@ -115,7 +116,37 @@ int main(int argc, char **argv)
   do
   {
 #ifdef EDISON
-    /* int status = snd_rawmidi_read(midiin, note_message + note_cycle,  */
+    int status = snd_rawmidi_read(midiin, &buffer, 1);
+    if (status < 0 || status != -11)
+    {
+      printf("Problem reading MIDI input [%d]: %s\n", status, snd_strerror(status));
+      break;
+    }
+    else
+    {
+      if ((unsigned char)buffer>= 0x80) // command byte
+      {
+      	note_cycle = 0;
+	note_message[note_cycle++] = buffer;
+      }
+      else
+      {
+	note_message[note_cycle++] = buffer;
+      	if(note_cycle == 3)
+      	{
+	  /* printf("0x%x   %3d %3d\n", note_message[0], note_message[1], note_message[2]); */
+      	  /* fflush(stdout); */
+	  int msg_type = (int) note_message[0];
+	  if(msg_type == MIDINOTEON)
+	    libpd_noteon(1, note_message[1], note_message[2]);
+	  else if(msg_type == MIDINOTEOFF)
+	    libpd_noteon(1, note_message[1], 0);
+	  else
+	    printf("wtf\n");
+      	  note_cycle = 0;
+      	}
+      }
+    }
 #else
     if(Pm_Poll(midi_stream))
     {
@@ -151,7 +182,6 @@ int main(int argc, char **argv)
   Pa_Terminate();
 
 #ifdef EDISON
-
   snd_rawmidi_close(midiin);
   snd_ctl_close(ctl);
 #else

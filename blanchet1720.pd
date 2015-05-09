@@ -1,8 +1,8 @@
-#N canvas 540 138 658 917 10;
+#N canvas 540 22 658 799 10;
 #N canvas 1094 388 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
-#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 1 1
+#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 0 1
 ;
 #X obj 236 126 tgl 50 0 empty empty L 10 20 0 25 -261682 -1 -1 0 1
 ;
@@ -100,8 +100,7 @@
 #X msg 364 512 128;
 #X msg 332 512 0;
 #X obj 293 579 print tosp;
-#N canvas 1895 125 509 557 gpio_registers 0;
-#X obj 24 4 mraagpio 3 4 5;
+#N canvas 455 125 509 557 gpio_registers 1;
 #X obj 24 28 unpack f f f;
 #X floatatom 61 77 5 0 0 0 - - -, f 5;
 #X floatatom 24 77 5 0 0 0 - - -, f 5;
@@ -116,25 +115,26 @@
 #X msg 276 131 stopoff 2 \, stoplist;
 #X msg 301 153 stopon 2 \, stoplist;
 #X obj 24 205 outlet;
-#X connect 0 0 1 0;
-#X connect 1 0 3 0;
-#X connect 1 1 2 0;
-#X connect 1 2 4 0;
-#X connect 2 0 8 0;
-#X connect 3 0 6 0;
-#X connect 4 0 11 0;
-#X connect 5 0 14 0;
-#X connect 6 0 7 0;
-#X connect 6 1 5 0;
-#X connect 7 0 14 0;
-#X connect 8 0 9 0;
-#X connect 8 1 10 0;
-#X connect 9 0 14 0;
-#X connect 10 0 14 0;
-#X connect 11 0 12 0;
-#X connect 11 1 13 0;
-#X connect 12 0 14 0;
-#X connect 13 0 14 0;
+#X obj 24 4 mraagpio;
+#X connect 0 0 2 0;
+#X connect 0 1 1 0;
+#X connect 0 2 3 0;
+#X connect 1 0 7 0;
+#X connect 2 0 5 0;
+#X connect 3 0 10 0;
+#X connect 4 0 13 0;
+#X connect 5 0 6 0;
+#X connect 5 1 4 0;
+#X connect 6 0 13 0;
+#X connect 7 0 8 0;
+#X connect 7 1 9 0;
+#X connect 8 0 13 0;
+#X connect 9 0 13 0;
+#X connect 10 0 11 0;
+#X connect 10 1 12 0;
+#X connect 11 0 13 0;
+#X connect 12 0 13 0;
+#X connect 14 0 0 0;
 #X coords 0 -1 1 1 125 45 1 20 50;
 #X restore 237 96 pd gpio_registers;
 #N canvas 1280 23 395 280 midi_registers 0;
