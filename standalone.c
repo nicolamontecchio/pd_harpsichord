@@ -100,7 +100,9 @@ int main(int argc, char **argv)
   snd_ctl_t *ctl;
   snd_ctl_open(&ctl, portname, 0);
   snd_rawmidi_t* midiin = NULL;
-  snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_SYNC);
+  snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_NONBLOCK);
+  int note_cycle = 0; // in [0,3)
+  int note_message[3];
 #else
   PortMidiStream *midi_stream;
   PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
@@ -113,7 +115,7 @@ int main(int argc, char **argv)
   do
   {
 #ifdef EDISON
-
+    /* int status = snd_rawmidi_read(midiin, note_message + note_cycle,  */
 #else
     if(Pm_Poll(midi_stream))
     {
