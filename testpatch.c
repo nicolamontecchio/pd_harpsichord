@@ -29,12 +29,13 @@ int main(int argc, char **argv)
     libpd_add_float(1.0);
     libpd_finish_message("fufi", "bang");
 
-
-
     void *patch = libpd_openfile(argv[1], ".");
     printf("patch file opened; handle: %d\n", (int) patch);
-    /* while(1) */
-    /*   sleep(10); */
+    while(1)
+    {
+      printf("sleeping ...\n");
+      sleep(1);
+    }
     libpd_closefile(patch);
     return 0;
   }
