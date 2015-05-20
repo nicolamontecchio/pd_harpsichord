@@ -3,6 +3,9 @@
 #include <unistd.h>
 #include <z_libpd.h>
 
+#ifdef EDISON
+#include "stoptrigger.c"
+#endif
 
 void pdprint(const char *s) {
   printf("%s", s);
@@ -14,7 +17,10 @@ int main(int argc, char **argv)
   if(argc == 2)
   {
     libpd_set_printhook(pdprint);
+
     libpd_init();
+    stoptrigger_setup();
+
     int init_err = libpd_init_audio(0, 2, 44100); // 0 in, 2 out, 44kHz
     if(init_err != 0)
     {
