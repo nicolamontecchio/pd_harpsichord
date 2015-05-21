@@ -5,9 +5,14 @@
 #include <portaudio.h>
 #ifdef EDISON
 #include <alsa/asoundlib.h>
+/* #include "stoptrigger.c" */
+/* #include "mraagpio.c" */
 #else
 #include <portmidi.h>
 #endif
+
+extern void mraagpio_setup(void);
+extern void stoptrigger_setup(void);
 
 
 const int MIDI_BUFFER_LEN = 1000;
@@ -57,6 +62,8 @@ int main(int argc, char **argv)
 
   libpd_set_printhook(pdprint);
   libpd_init();
+  mraagpio_setup();
+  stoptrigger_setup();
 
   int init_err = libpd_init_audio(0, 2, 44100); // 0 in, 2 out, 44kHz
   if(init_err != 0)

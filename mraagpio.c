@@ -23,7 +23,8 @@ void mraagpio_tick(t_mraagpio *x)
 {
 #ifdef EDISON
   t_atom *output = malloc(sizeof(t_atom) * x->n_pins);
-  for (int i = 0; i < x->n_pins; i++)
+  int i;
+  for (i = 0; i < x->n_pins; i++)
   {
     int status = mraa_gpio_read(x->gpios[i]);
     SETFLOAT(output + i, status);
@@ -54,13 +55,14 @@ void mraagpio_free(t_mraagpio *x)
 
 void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
 {
+  int i;
   t_mraagpio *x = (t_mraagpio *)pd_new(mraagpio_class);
   x->n_pins = argc;
   x->pins = malloc(sizeof(int) * argc);
 #ifdef EDISON
   x->gpios = malloc(sizeof(mraa_gpio_context) * argc);
 #endif
-  for(int i = 0; i < argc; i++)
+  for(i = 0; i < argc; i++)
   {
     if(argv[i].a_type == A_FLOAT)
     {
