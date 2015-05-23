@@ -5,15 +5,16 @@
 #include <portaudio.h>
 #ifdef EDISON
 #include <alsa/asoundlib.h>
+#else
+#include <portmidi.h>
+#endif
+
 extern "C"
 {
   void mraagpio_setup(void);
   void stoptrigger_setup(void);
   void sampleplayer_tilde_setup(void);
 }
-#else
-#include <portmidi.h>
-#endif
 
 
 const int MIDI_BUFFER_LEN = 1000;

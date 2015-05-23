@@ -22,7 +22,7 @@ typedef struct _mraagpio
 void mraagpio_tick(t_mraagpio *x)
 {
 #ifdef EDISON
-  t_atom *output = malloc(sizeof(t_atom) * x->n_pins);
+  t_atom *output = (t_atom *) malloc(sizeof(t_atom) * x->n_pins);
   int i;
   for (i = 0; i < x->n_pins; i++)
   {
@@ -58,7 +58,7 @@ void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
   int i;
   t_mraagpio *x = (t_mraagpio *)pd_new(mraagpio_class);
   x->n_pins = argc;
-  x->pins = malloc(sizeof(int) * argc);
+  x->pins = (int *) malloc(sizeof(int) * argc);
 #ifdef EDISON
   x->gpios = malloc(sizeof(mraa_gpio_context) * argc);
 #endif
