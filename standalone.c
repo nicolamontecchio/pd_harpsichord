@@ -28,6 +28,7 @@ int stop = 0;
 void sighandler(int dum)
 {
   printf("setting stop flag\n");
+  fflush(stdout);
   stop=1;
 }
 
@@ -61,6 +62,8 @@ int main(int argc, char **argv)
   int audio_device_num = atoi(argv[1]);
   int midi_device_num = atoi(argv[2]);
   PaStream *audio_stream;
+
+  signal(SIGINT, sighandler);
 
   libpd_set_printhook(pdprint);
   libpd_init();
