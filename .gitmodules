@@ -1,0 +1,3 @@
+[submodule "pd_sampleplayer"]
+	path = pd_sampleplayer
+	url = git@github.com:nicolamontecchio/pd_sampleplayer.git
