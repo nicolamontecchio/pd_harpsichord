@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <signal.h>
 #include <z_libpd.h>
 #include <portaudio.h>
 #ifdef EDISON
@@ -78,11 +79,6 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  // dsp on (?)
-  libpd_start_message(1);
-  libpd_add_float(1.0f);
-  libpd_finish_message("pd", "dsp");
-
   void *patch = libpd_openfile("blanchet1720.pd", ".");
   printf("patch file opened; handle: %d\n", patch);
 
@@ -106,6 +102,17 @@ int main(int argc, char **argv)
 
   Pa_OpenStream( &audio_stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
   Pa_StartStream( audio_stream );
+
+  printf("portaudio stream initialized\n");
+  fflush(stdout);
+
+  // dsp on (?)
+  libpd_start_message(1);
+  libpd_add_float(1.0f);
+  libpd_finish_message("pd", "dsp");
+
+  printf("dsp is on\n");
+  fflush(stdout);
 
 #ifdef EDISON
   char portname[32];
