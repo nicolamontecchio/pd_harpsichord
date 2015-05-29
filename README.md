@@ -1,5 +1,7 @@
 The `sampleplayer~` external can be found at [this github
-page](https://github.com/nicolamontecchio/pd_sampleplayer).
+page](https://github.com/nicolamontecchio/pd_sampleplayer).  Clone it
+inside this directory (git submodules do not work on edison
+apparently).
 
 Harpsichord samples are available from [Soni
 Musicae](http://duphly.free.fr/en/blanchet.html).
