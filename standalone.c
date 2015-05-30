@@ -84,12 +84,16 @@ int main(int argc, char **argv)
 
   flip_register(0); // turn 8' on by default
 
-  int pd_tick_size = libpd_blocksize();
+  // dsp on (?)
+  libpd_start_message(1);
+  libpd_add_float(1.0f);
+  libpd_finish_message("pd", "dsp");
+  printf("pd dsp on\n");
+  fflush(stdout);
 
   Pa_Initialize();
   const PaDeviceInfo    *audio_device_info = Pa_GetDeviceInfo(audio_device_num);
   printf("using audio device [%d]: %s\n", audio_device_num, audio_device_info->name);
-
 
   PaStreamParameters outputParameters;
   bzero( &outputParameters, sizeof( outputParameters ) );
@@ -100,16 +104,12 @@ int main(int argc, char **argv)
   outputParameters.suggestedLatency = Pa_GetDeviceInfo(audio_device_num)->defaultLowOutputLatency ;
   outputParameters.hostApiSpecificStreamInfo = NULL;
 
-  Pa_OpenStream( &audio_stream, NULL, &outputParameters, SAMPLE_RATE, pd_tick_size,  paNoFlag, patestCallback, NULL);
+  Pa_OpenStream( &audio_stream, NULL, &outputParameters, SAMPLE_RATE, libpd_blocksize(),  paNoFlag, patestCallback, NULL);
   Pa_StartStream( audio_stream );
 
   printf("portaudio stream initialized\n");
   fflush(stdout);
 
-  // dsp on (?)
-  libpd_start_message(1);
-  libpd_add_float(1.0f);
-  libpd_finish_message("pd", "dsp");
 
   printf("dsp is on\n");
   fflush(stdout);
