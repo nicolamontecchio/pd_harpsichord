@@ -10,3 +10,7 @@ The `samples_prepare.py` script must be run to rename wave files,
 since spaces are hard to deal with in Pd.
 
 [Audio demo](https://soundcloud.com/nicolamontecchio/pd-harpsichord-demo)
+
+**WARNING** When compiling on edison, libsndfile must be patched;
+comment out the line after "ultimate sanity check comment" in
+sndfile.c.

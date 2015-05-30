@@ -137,7 +137,7 @@ int main(int argc, char **argv)
   {
 #ifdef EDISON
     int status = snd_rawmidi_read(midiin, &buffer, 1);
-    if (status < 0 || status != -11)
+    if (status < 0 && status != -11)
     {
       printf("Problem reading MIDI input [%d]: %s\n", status, snd_strerror(status));
       break;
@@ -154,15 +154,12 @@ int main(int argc, char **argv)
 	note_message[note_cycle++] = buffer;
       	if(note_cycle == 3)
       	{
-	  /* printf("0x%x   %3d %3d\n", note_message[0], note_message[1], note_message[2]); */
-      	  /* fflush(stdout); */
 	  int msg_type = (int) note_message[0];
 	  if(msg_type == MIDINOTEON)
 	    libpd_noteon(1, note_message[1], note_message[2]);
 	  else if(msg_type == MIDINOTEOFF)
 	    libpd_noteon(1, note_message[1], 0);
-	  else
-	    printf("wtf\n");
+	  printf("midi message: %u %u %u\n", note_message[0], note_message[1], note_message[2]);
       	  note_cycle = 0;
       	}
       }
