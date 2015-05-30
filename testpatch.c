@@ -4,7 +4,7 @@
 #include <z_libpd.h>
 
 #ifdef EDISON
-#include "stoptrigger.c"
+#include "pan.c"
 #endif
 
 void pdprint(const char *s) {
@@ -17,9 +17,10 @@ int main(int argc, char **argv)
   if(argc == 2)
   {
     libpd_set_printhook(pdprint);
-
     libpd_init();
-    stoptrigger_setup();
+    pan_tilde_setup();
+
+    void *patch = libpd_openfile(argv[1], ".");
 
     int init_err = libpd_init_audio(0, 2, 44100); // 0 in, 2 out, 44kHz
     if(init_err != 0)
@@ -27,15 +28,17 @@ int main(int argc, char **argv)
       printf("audio init failed with code %d\n", init_err);
       return 1;
     }
+
     libpd_start_message(1);
     libpd_add_float(1.0f);
     libpd_finish_message("pd", "dsp");
 
-    libpd_start_message(1);
-    libpd_add_float(1.0);
-    libpd_finish_message("fufi", "bang");
+    /* libpd_start_message(1); */
+    /* libpd_add_float(1.0); */
+    /* libpd_finish_message("fufi", "bang"); */
 
-    void *patch = libpd_openfile(argv[1], ".");
+
+
     printf("patch file opened; handle: %d\n", (int) patch);
     while(1)
     {
