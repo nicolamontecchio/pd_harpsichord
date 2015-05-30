@@ -9,7 +9,7 @@ mac_standalone:
 mac :
 	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o stoptrigger.pd_darwin stoptrigger.c
 	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o mraagpio.pd_darwin mraagpio.c
-	cd pd_sampleplayer; make pdexternal; cd ..; ln -s pd_sampleplayer/sampleplayer~.pd_darwin .
+	cd pd_sampleplayer; make pdexternal; cp sampleplayer~.pd_darwin ..
 
 edison :
 	cc -D EDISON -lportaudio -lasound -o listdevices -O2 listdevices.c
