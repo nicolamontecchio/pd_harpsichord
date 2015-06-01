@@ -10,12 +10,10 @@
 #include <portmidi.h>
 #endif
 
-extern "C"
-{
-  void mraagpio_setup(void);
-  void stoptrigger_setup(void);
-  void sampleplayer_tilde_setup(void);
-}
+void mraagpio_setup(void);
+void stoptrigger_setup(void);
+void sampleplayer_tilde_setup(void);
+
 
 
 const int MIDI_BUFFER_LEN = 1000;

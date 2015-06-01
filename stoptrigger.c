@@ -21,8 +21,9 @@ const int STOPMSG_TYPE_TOGGLE = 2;
 
 void stop_printout(t_stoptrigger *x)
 {
+  int i;
   t_atom output[MAX_STOPS];
-  for (int i = 0; i < x->nstops; i++)
+  for (i = 0; i < x->nstops; i++)
     SETFLOAT(output+i, x->stop_active[i]);
   outlet_list(x->outlet_stops,&s_list,x->nstops,output);
 }
@@ -56,9 +57,10 @@ void stoptrigger_control_inlet(t_stoptrigger *x, t_symbol *selector, int argc, t
 {
   if(selector == &s_list)
   {
+    int i;
     int note = atom_getint(argv+0);
     int velocity = atom_getint(argv+1);
-    for (int i = 0; i < x->nstops; i++)
+    for (i = 0; i < x->nstops; i++)
       if(x->stop_active[i])
       {
 	int outnote = note + NOTE_DELTA * i;
@@ -81,6 +83,7 @@ void stoptrigger_control_inlet(t_stoptrigger *x, t_symbol *selector, int argc, t
 // only one argument: the number of stops used
 void *stoptrigger_new(t_symbol *selector, int argc, t_atom *argv)
 {
+  int i;
   t_stoptrigger *x = (t_stoptrigger *)pd_new(stoptrigger_class);
   if(argc != 1)
   {
@@ -93,7 +96,7 @@ void *stoptrigger_new(t_symbol *selector, int argc, t_atom *argv)
     error("stoptrigger: number of stops must be a positive integer");
     return 0;
   }
-  for (int i = 0; i < x->nstops; i++)
+  for (i = 0; i < x->nstops; i++)
     x->stop_active[i] = 0;
   x->outlet_notes = outlet_new(&x->x_ob, &s_list);
   x->outlet_stops = outlet_new(&x->x_ob, &s_list);

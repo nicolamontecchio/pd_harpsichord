@@ -1,4 +1,4 @@
-#N canvas 540 22 658 799 10;
+#N canvas 678 353 658 799 10;
 #N canvas 1094 388 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
@@ -100,7 +100,7 @@
 #X msg 364 512 128;
 #X msg 332 512 0;
 #X obj 293 579 print tosp;
-#N canvas 455 125 509 557 gpio_registers 1;
+#N canvas 455 125 509 557 gpio_registers 0;
 #X obj 24 28 unpack f f f;
 #X floatatom 61 77 5 0 0 0 - - -, f 5;
 #X floatatom 24 77 5 0 0 0 - - -, f 5;
