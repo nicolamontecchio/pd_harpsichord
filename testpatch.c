@@ -3,9 +3,10 @@
 #include <unistd.h>
 #include <z_libpd.h>
 
-#ifdef EDISON
-#include "pan.c"
-#endif
+/* #ifdef EDISON */
+/* #include "pan.c" */
+/* #endif */
+/* extern void pan_tilde_setup(); */
 
 void pdprint(const char *s) {
   printf("%s", s);

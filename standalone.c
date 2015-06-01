@@ -137,7 +137,8 @@ int main(int argc, char **argv)
   {
 #ifdef EDISON
     int status = snd_rawmidi_read(midiin, &buffer, 1);
-    if (status < 0 && status != -11)
+    if (status == -11) {}
+    else if (status < 0)
     {
       printf("Problem reading MIDI input [%d]: %s\n", status, snd_strerror(status));
       break;

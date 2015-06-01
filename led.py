@@ -1,14 +1,32 @@
 import mraa
 import time
+import random
 
 print (mraa.getVersion())
-x = mraa.Gpio(13)
-x.dir(mraa.DIR_OUT)
 
-s = 0
+
+x = mraa.Gpio(13); x.dir(mraa.DIR_OUT)
+print 'x'
+y = mraa.Gpio(40); y.dir(mraa.DIR_OUT)
+print 'y'
+z = mraa.Gpio(41); z.dir(mraa.DIR_OUT)
+print 'z'
+
+sx = 0
+sy = 0
+sz = 0
 
 while True:
-    s = 1 if s==0 else 0
-    x.write(s)
-    print s
-    time.sleep(1.0)
+    sx = 1 if sx==0 else 0
+    x.write(sx)
+    print 'x', sx
+    time.sleep(random.random())
+    sy = 1 if sy==0 else 0
+    y.write(sy)
+    print 'y', sy
+    time.sleep(random.random())
+    sz = 1 if sz==0 else 0
+    z.write(sz)
+    print 'z', sz
+    time.sleep(random.random())
+    print
