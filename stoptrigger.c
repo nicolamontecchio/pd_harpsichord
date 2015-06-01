@@ -60,6 +60,7 @@ void stoptrigger_control_inlet(t_stoptrigger *x, t_symbol *selector, int argc, t
     int i;
     int note = atom_getint(argv+0);
     int velocity = atom_getint(argv+1);
+    /* post("receiving: %d %d", note, velocity); */
     for (i = 0; i < x->nstops; i++)
       if(x->stop_active[i])
       {
@@ -68,6 +69,7 @@ void stoptrigger_control_inlet(t_stoptrigger *x, t_symbol *selector, int argc, t
 	SETFLOAT(output+0, outnote);
 	SETFLOAT(output+1, velocity);
 	outlet_list(x->outlet_notes,&s_list,2,output);
+	/* post("outputting: %d %d", outnote, velocity); */
       }
   }
   else if(strcmp(selector->s_name, "stopon") == 0)

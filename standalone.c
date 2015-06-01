@@ -121,7 +121,7 @@ int main(int argc, char **argv)
   snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_NONBLOCK);
   char buffer;
   int note_cycle = 0; // in [0,3)
-  int note_message[3];
+  unsigned int note_message[3];
 #else
   PortMidiStream *midi_stream;
   PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
@@ -153,11 +153,18 @@ int main(int argc, char **argv)
 	note_message[note_cycle++] = buffer;
       	if(note_cycle == 3)
       	{
-	  int msg_type = (int) note_message[0];
+	  unsigned int msg_type = note_message[0] & 0xff;
+	  /* printf("msg_type: %u\n", msg_type); */
 	  if(msg_type == MIDINOTEON)
+	  {
+	    /* printf("libpd_noteon\n"); */
 	    libpd_noteon(1, note_message[1], note_message[2]);
+	  }
 	  else if(msg_type == MIDINOTEOFF)
+	  {
+	    /* printf("libpd_noteoff\n"); */
 	    libpd_noteon(1, note_message[1], 0);
+	  }
 	  printf("midi message: %u %u %u\n", note_message[0], note_message[1], note_message[2]);
       	  note_cycle = 0;
       	}
