@@ -13,8 +13,5 @@ mac :
 
 edison :
 	cc -D EDISON -lportaudio -lasound -o listdevices -O2 listdevices.c
-	# cc -g -c -march=native -O3 -o stoptrigger.o stoptrigger.c
 	# cc -g -c -std=c99 -march=native -O3 -D EDISON -o mraagpio.o mraagpio.c
-	# cd pd_sampleplayer; make pdexternal_static
-	cc -g -D EDISON -o standalone -lportaudio -lasound -lsndfile -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -Llibpd/libs -lpd -lmraa standalone.c mraagpio.c stoptrigger.c
-	# cc -std=c99  -o testpatch -D EDISON -O3 -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -Llibpd/libs -lpd testpatch.c # pan.o
+	cc -g -D EDISON -o standalone -lportaudio -lasound -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -Llibpd/libs -lpd -lsndfile -lmraa standalone.c mraagpio.c
