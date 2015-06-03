@@ -5,9 +5,9 @@
 #include <mraa.h>
 #endif
 
-static t_class *mraagpio_class;
+static t_class *mraagpioin_class;
 
-typedef struct _mraagpio
+typedef struct _mraagpioin
 {
   t_object x_obj;
   t_clock *x_clock;
@@ -17,9 +17,9 @@ typedef struct _mraagpio
 #ifdef EDISON
   mraa_gpio_context *gpios;
 #endif
-} t_mraagpio;
+} t_mraagpioin;
 
-void mraagpio_tick(t_mraagpio *x)
+void mraagpioin_tick(t_mraagpioin *x)
 {
 #ifdef EDISON
   t_atom *output = (t_atom *) malloc(sizeof(t_atom) * x->n_pins);
@@ -43,7 +43,7 @@ void mraagpio_tick(t_mraagpio *x)
   clock_delay(x->x_clock, 1500);
 }
 
-void mraagpio_free(t_mraagpio *x)
+void mraagpioin_free(t_mraagpioin *x)
 {
   clock_free(x->x_clock);
   free(x->pins);
@@ -53,10 +53,10 @@ void mraagpio_free(t_mraagpio *x)
 #endif
 }
 
-void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
+void *mraagpioin_new(t_symbol *s, int argc, t_atom *argv)
 {
   int i;
-  t_mraagpio *x = (t_mraagpio *)pd_new(mraagpio_class);
+  t_mraagpioin *x = (t_mraagpioin *)pd_new(mraagpioin_class);
   x->n_pins = argc;
   x->pins = (int *) malloc(sizeof(int) * argc);
 #ifdef EDISON
@@ -74,19 +74,19 @@ void *mraagpio_new(t_symbol *s, int argc, t_atom *argv)
     }
     else
     {
-      post("error while creating mraagpio");
+      post("error while creating mraagpioin");
       return NULL;
     }
   }
-  x->x_clock = clock_new(x, (t_method)mraagpio_tick);
+  x->x_clock = clock_new(x, (t_method)mraagpioin_tick);
   x->outlet_registers = outlet_new(&x->x_obj, &s_anything);
   clock_delay(x->x_clock, 100);
   return (x);
 }
 
-void mraagpio_setup(void)
+void mraagpioin_setup(void)
 {
-  mraagpio_class = class_new(gensym("mraagpio"), (t_newmethod)mraagpio_new,
-			     (t_method)mraagpio_free, sizeof(t_mraagpio), 0,
+  mraagpioin_class = class_new(gensym("mraagpioin"), (t_newmethod)mraagpioin_new,
+			     (t_method)mraagpioin_free, sizeof(t_mraagpioin), 0,
 			     A_GIMME, 0);
 }

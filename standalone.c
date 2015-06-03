@@ -66,7 +66,7 @@ int main(int argc, char **argv)
 
   libpd_set_printhook(pdprint);
   libpd_init();
-  mraagpio_setup();
+  mraagpioin_setup();
   stoptrigger_setup();
   sampleplayer_tilde_setup();
 

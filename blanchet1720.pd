@@ -1,4 +1,4 @@
-#N canvas 610 80 673 890 10;
+#N canvas 625 38 673 890 10;
 #N canvas 1094 388 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
@@ -114,8 +114,8 @@
 #X msg 276 131 stopoff 2 \, stoplist;
 #X msg 301 153 stopon 2 \, stoplist;
 #X obj 24 205 outlet;
-#X obj 24 4 mraagpio;
 #X obj 209 54 print mraagpioOUT;
+#X obj 24 4 mraagpioin 23;
 #X connect 0 0 2 0;
 #X connect 0 1 1 0;
 #X connect 0 2 3 0;
@@ -134,8 +134,8 @@
 #X connect 10 1 12 0;
 #X connect 11 0 13 0;
 #X connect 12 0 13 0;
-#X connect 14 0 0 0;
-#X connect 14 0 15 0;
+#X connect 15 0 0 0;
+#X connect 15 0 14 0;
 #X coords 0 -1 1 1 125 45 1 20 50;
 #X restore 237 96 pd gpio_registers;
 #N canvas 1280 23 395 280 midi_registers 0;
