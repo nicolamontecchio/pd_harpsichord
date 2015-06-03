@@ -13,5 +13,4 @@ mac :
 
 edison :
 	cc -D EDISON -lportaudio -lasound -o listdevices -O2 listdevices.c
-	# cc -g -c -std=c99 -march=native -O3 -D EDISON -o mraagpio.o mraagpio.c
-	cc -g -D EDISON -o standalone -lportaudio -lasound -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -Llibpd/libs -lpd -lsndfile -lmraa standalone.c mraagpio.c
+	cc -g -D EDISON -o standalone -lportaudio -lasound -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -Llibpd/libs -lpd -lsndfile -lmraa standalone.c
