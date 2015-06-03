@@ -40,7 +40,7 @@ void mraagpioin_tick(t_mraagpioin *x)
   /*   r /= 2; */
   /* } */
 #endif
-  clock_delay(x->x_clock, 1500);
+  clock_delay(x->x_clock, 100);
 }
 
 void mraagpioin_free(t_mraagpioin *x)
@@ -48,7 +48,6 @@ void mraagpioin_free(t_mraagpioin *x)
   clock_free(x->x_clock);
   free(x->pins);
 #ifdef EDISON
-  mraa_deinit();
   free(x->gpios);
 #endif
 }

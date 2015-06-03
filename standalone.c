@@ -67,6 +67,7 @@ int main(int argc, char **argv)
   libpd_set_printhook(pdprint);
   libpd_init();
   mraagpioin_setup();
+  mraagpioout_setup();
   stoptrigger_setup();
   sampleplayer_tilde_setup();
 
@@ -107,7 +108,6 @@ int main(int argc, char **argv)
 
   printf("portaudio stream initialized\n");
   fflush(stdout);
-
 
   printf("dsp is on\n");
   fflush(stdout);
@@ -207,6 +207,7 @@ int main(int argc, char **argv)
 #ifdef EDISON
   snd_rawmidi_close(midiin);
   snd_ctl_close(ctl);
+  mraa_deinit();
 #else
   Pm_Close(midi_stream);
   Pm_Terminate();
