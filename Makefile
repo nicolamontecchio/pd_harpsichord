@@ -8,8 +8,8 @@ mac_standalone:
 
 mac :
 	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o stoptrigger.pd_darwin stoptrigger.c
-	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o mraagpio.pd_darwin mraagpio.c
-	cd pd_sampleplayer; make pdexternal; cp sampleplayer~.pd_darwin ..
+	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o mraagpioin.pd_darwin mraagpioin.c
+	cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o mraagpioout.pd_darwin mraagpioout.c
 
 edison :
 	cc -D EDISON -lportaudio -lasound -o listdevices -O2 listdevices.c
