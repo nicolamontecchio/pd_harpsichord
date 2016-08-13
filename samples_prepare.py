@@ -26,7 +26,7 @@ def do_instrument_blanchet(din, dout):
         for n, ffin in iterate_through_dir():
             ffout = os.path.join(dout, '%d.wav' % n)
             shutil.move(ffin, ffout)
-            print >> out, 'setsample %d 0.2 %s' % (n, ffout)
+            print >> out, 'addsample %d 0.2' % (n, ffout)
 
 
 
