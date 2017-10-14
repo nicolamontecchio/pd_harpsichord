@@ -1,26 +1,11 @@
-#include <stdio.h>
-/* #include <portaudio.h> */
 #include <alsa/asoundlib.h>
+#include <stdio.h>
 
 int main(int argc, char **argv) {
 
   int n, num_audio_devices, num_midi_devices;
 
-   printf("ALSA library version: %s\n",
-          SND_LIB_VERSION_STR);
-
-  // TODO re-enable portaudio (or just rewrite directly into alsa?)
-
-  /* printf("list of audio devices:\n"); */
-  /* Pa_Initialize(); */
-  /* num_audio_devices = Pa_GetDeviceCount(); */
-  /* for(n = 0; n < num_audio_devices; n++) */
-  /* { */
-  /*   const PaDeviceInfo *di = Pa_GetDeviceInfo(n); */
-  /*   printf(" [%3d]: %s\n", n, di->name); */
-  /* } */
-  /* printf("\n"); */
-  /* Pa_Terminate(); */
+  printf("ALSA library version: %s\n", SND_LIB_VERSION_STR);
 
   printf("list of midi devices:\n");
 
@@ -62,7 +47,7 @@ int main(int argc, char **argv) {
       }
       if (midi_device < 0)
         break;
-      printf(" [%3d]: %s\n", midi_card, card_long_name);
+      printf(" [%3d]: <%s> %s\n", midi_card, card_name, card_long_name);
     }
     snd_ctl_close(ctl);
   }
