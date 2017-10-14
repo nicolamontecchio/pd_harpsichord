@@ -21,10 +21,12 @@ fi
 
 echo "building the listdevices script"
 cd /shared
-$CC -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
+$CC -O3 -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
 
 echo "building the alsamidi script"
-$CC -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
+$CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
+
+# TODO could call strip ...
 
 echo "scp-ing stuff into chip"
-scp alsamidi listdevices chip@chip.local:
+scp listdevices alsamidi chip@chip.local:
