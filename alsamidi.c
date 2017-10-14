@@ -1,5 +1,3 @@
-
-
 #include <alsa/asoundlib.h>
 #include <stdio.h>
 
