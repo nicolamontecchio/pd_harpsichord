@@ -23,6 +23,8 @@ echo "building the listdevices script"
 cd /shared
 $CC -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
 
+echo "building the alsamidi script"
+$CC -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
 
 echo "scp-ing stuff into chip"
-scp listdevices chip@chip.local:listdevices
+scp alsamidi listdevices chip@chip.local:
