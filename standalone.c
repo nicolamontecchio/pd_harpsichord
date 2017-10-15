@@ -4,13 +4,11 @@
 #include <signal.h>
 #include <z_libpd.h>
 #include <portaudio.h>
-#ifdef EDISON
 #include <alsa/asoundlib.h>
-#else
-#include <portmidi.h>
-#endif
 
-void mraagpio_setup(void);
+
+
+// needed by pd stuff, otherwise linking issues (?)
 void stoptrigger_setup(void);
 void sampleplayer_tilde_setup(void);
 
@@ -112,7 +110,6 @@ int main(int argc, char **argv)
   printf("dsp is on\n");
   fflush(stdout);
 
-#ifdef EDISON
   char portname[32];
   sprintf(portname, "hw:%d", midi_device_num);
   snd_ctl_t *ctl;
@@ -122,18 +119,9 @@ int main(int argc, char **argv)
   char buffer;
   int note_cycle = 0; // in [0,3)
   unsigned int note_message[3];
-#else
-  PortMidiStream *midi_stream;
-  PmEvent *midi_event_buffer = (PmEvent*) malloc(sizeof(PmEvent) * MIDI_BUFFER_LEN);
-  Pm_Initialize();
-  const PmDeviceInfo    *midi_device_info  = Pm_GetDeviceInfo(midi_device_num);
-  printf("using midi device  [%d]: %s\n", midi_device_num, midi_device_info->name);
-  Pm_OpenInput(&midi_stream, midi_device_num, NULL, MIDI_BUFFER_LEN, NULL, NULL);
-#endif
 
   do
   {
-#ifdef EDISON
     int status = snd_rawmidi_read(midiin, &buffer, 1);
     if (status == -11) {}
     else if (status < 0)
@@ -170,33 +158,6 @@ int main(int argc, char **argv)
       	}
       }
     }
-#else
-    if(Pm_Poll(midi_stream))
-    {
-      int n_midi_ev_read = Pm_Read(midi_stream, midi_event_buffer, MIDI_BUFFER_LEN);
-      for(int i = 0; i < n_midi_ev_read; i++)
-      {
-    	PmEvent msg = midi_event_buffer[i];
-    	int status = Pm_MessageStatus(msg.message);
-    	int data1  = Pm_MessageData1(msg.message);
-    	int data2  = Pm_MessageData2(msg.message);
-    	int data3  = ((msg.message >> 24) & 0xff);
-    	int msgtype = ((status & 0xf0) == 0xf0 ?
-    		       status : (status & 0xf0));
-    	switch(msgtype)
-    	{
-    	case MIDINOTEON:
-    	  libpd_noteon(1, data1, data2);
-    	  break;
-    	case MIDINOTEOFF:
-    	  libpd_noteon(1, data1, 0);
-    	  break;
-    	default:
-    	  printf("wtf\n");
-    	}
-      }
-    }
-#endif
     Pa_Sleep(2);
   } while(!stop);
 
@@ -204,15 +165,9 @@ int main(int argc, char **argv)
   Pa_CloseStream( audio_stream );
   Pa_Terminate();
 
-#ifdef EDISON
   snd_rawmidi_close(midiin);
   snd_ctl_close(ctl);
   mraa_deinit();
-#else
-  Pm_Close(midi_stream);
-  Pm_Terminate();
-  free(midi_event_buffer);
-#endif
 
   libpd_closefile(patch);
 }
