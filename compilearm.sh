@@ -1,11 +1,9 @@
 # run this from docker using the cross-compiling image thing:
 # docker run -it --rm -v `pwd`:/shared dockcross/linux-armv7 bash
 
-
-cd /shared
-
-# was ALSA already compiled? if not, do it
+# was ALSA already compiled?
 if [ ! -f /shared/armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a ]; then
+    cd /shared
     rm -rf armlibs
     mkdir armlibs
     echo "building ALSA"
@@ -17,10 +15,22 @@ if [ ! -f /shared/armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a ]; then
     make -j4
 fi
 
+# was LIBPD already compiled?
+if [ ! -f libpd.so ]; then
+    echo "building libpd"
+    cd /shared
+    git clone https://github.com/libpd/libpd.git
+    cd libpd
+    git checkout 0.10.0
+    git submodule init
+    git submodule update
+    make -j4
+    cp libs/libpd.so ../
+fi
 
+cd /shared
 
 echo "building the listdevices script"
-cd /shared
 $CC -O3 -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
 
 echo "building the alsamidi script"
@@ -28,6 +38,5 @@ $CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsam
 
 
 # TODO could call strip ...
-
 echo "scp-ing stuff into chip"
-scp listdevices alsamidi chip@chip.local:
+# scp listdevices alsamidi chip@chip.local:
