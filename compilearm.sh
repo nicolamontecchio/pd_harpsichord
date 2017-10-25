@@ -2,7 +2,7 @@
 # docker run -it --rm -v `pwd`:/shared dockcross/linux-armv7 bash
 
 # was ALSA already compiled?
-if [ ! -f /shared/armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a ]; then
+if [ ! -f libasound.a ]; then
     cd /shared
     rm -rf armlibs
     mkdir armlibs
@@ -13,9 +13,12 @@ if [ ! -f /shared/armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a ]; then
     cd alsa-lib-1.1.4.1
     ./configure
     make -j4
+    cp /shared/armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a ../
 fi
 
 # was LIBPD already compiled?
+# TODO according to https://github.com/libpd/libpd/wiki/libpd some flags might be needed
+
 if [ ! -f libpd.so ]; then
     echo "building libpd"
     cd /shared
@@ -36,7 +39,8 @@ $CC -O3 -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  li
 echo "building the alsamidi script"
 $CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
 
+echo "building the test patch loading script"
+$CC -O3 -o testpatch -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
 
-# TODO could call strip ...
-echo "scp-ing stuff into chip"
-# scp listdevices alsamidi chip@chip.local:
+# echo "scp-ing stuff into chip"
+# scp listdevices alsamidi testpatch chip@chip.local:
