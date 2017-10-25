@@ -35,13 +35,16 @@ fi
 cd /shared
 
 echo "building the listdevices script"
-$CC -O3 -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
+$CC -O3 -o listdevices -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  listdevices.c libasound.a
 
 echo "building the alsamidi script"
-$CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c armlibs/alsa-lib-1.1.4.1/src/.libs/libasound.a
+$CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsamidi.c libasound.a
 
 echo "building the test patch loading script"
 $CC -O3 -o testpatch -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
 
+echo "building the standalone app"
+$CC -O3 -o standalone -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  standalone.c libasound.a
+
 # echo "scp-ing stuff into chip"
-scp listdevices alsamidi testpatch testpatch.pd libpd.so chip@chip.local:
+rsync -avz listdevices alsamidi testpatch testpatch.pd libpd.so standalone chip@chip.local:
