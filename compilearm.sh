@@ -44,7 +44,7 @@ echo "building the test patch loading script"
 $CC -O3 -o testpatch -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
 
 echo "building the stoptrigger external"
-$CC -O3 -o stoptrigger.so -shared -undefined=dynamic_lookup -I./libpd/pure-data/src -fPIC stoptrigger.c
+$CC -O3 -o stoptrigger.pd_linux -shared -undefined=dynamic_lookup -I./libpd/pure-data/src -fPIC stoptrigger.c
 # -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
 # cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o stoptrigger.pd_darwin stoptrigger.c
 
