@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
   int init_err = libpd_init_audio(0, 2, 44100); // 0 in, 2 out, 44kHz
   if (init_err != 0) {
-    printf("audio init failed with code %d\n", init_err);
+    printf("libpd audio init failed with code %d\n", init_err);
     return 1;
   }
 
@@ -102,6 +102,12 @@ int main(int argc, char **argv) {
   snd_ctl_open(&ctl, portname, 0);
   snd_rawmidi_t *midiin = NULL;
   snd_rawmidi_open(&midiin, NULL, portname, SND_RAWMIDI_NONBLOCK);
+
+  if (!midiin) {
+    fprintf(stderr, "unable to open midi device %s, quitting\n", portname);
+    exit(1);
+  }
+
   char buffer;
   int note_cycle = 0; // in [0,3)
   unsigned int note_message[3];
