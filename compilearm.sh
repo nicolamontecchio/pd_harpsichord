@@ -45,12 +45,9 @@ $CC -O3 -o testpatch -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/
 
 echo "building the stoptrigger external"
 $CC -O3 -o stoptrigger.pd_linux -shared -undefined=dynamic_lookup -I./libpd/pure-data/src -fPIC stoptrigger.c
-# -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
-# cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o stoptrigger.pd_darwin stoptrigger.c
-
 
 echo "building the standalone app"
 $CC -O3 -o standalone -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  standalone.c libasound.a
 
-# echo "scp-ing stuff into chip"
-# rsync -avz listdevices alsamidi testpatch testpatch.pd libpd.so standalone chip@chip.local:
+echo "scp-ing stuff into chip"
+rsync -avz listdevices alsamidi testpatch testpatch.pd libpd.so standalone stoptrigger.pd_linux chip@chip.local:
