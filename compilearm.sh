@@ -43,8 +43,14 @@ $CC -O3 -o alsamidi -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl  alsam
 echo "building the test patch loading script"
 $CC -O3 -o testpatch -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
 
+echo "building the stoptrigger external"
+$CC -O3 -o stoptrigger.so -shared -undefined=dynamic_lookup -I./libpd/pure-data/src -fPIC stoptrigger.c
+# -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  testpatch.c
+# cc -std=c99 -march=native -O3 -shared -undefined dynamic_lookup -o stoptrigger.pd_darwin stoptrigger.c
+
+
 echo "building the standalone app"
 $CC -O3 -o standalone -Iarmlibs/alsa-lib-1.1.4.1/include -lm -lpthread -ldl -Ilibpd/libpd_wrapper -Ilibpd/pure-data/src -L. -lpd  standalone.c libasound.a
 
 # echo "scp-ing stuff into chip"
-rsync -avz listdevices alsamidi testpatch testpatch.pd libpd.so standalone chip@chip.local:
+# rsync -avz listdevices alsamidi testpatch testpatch.pd libpd.so standalone chip@chip.local:

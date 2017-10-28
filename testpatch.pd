@@ -2,5 +2,6 @@
 #X obj 108 203 print;
 #X obj 158 70 loadbang;
 #X msg 121 140 holy crap;
+#X obj 257 160 stoptrigger 3;
 #X connect 1 0 2 0;
 #X connect 2 0 0 0;
