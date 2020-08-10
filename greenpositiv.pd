@@ -1,8 +1,8 @@
-#N canvas 1155 446 679 1019 10;
+#N canvas 1119 243 679 1019 10;
 #N canvas 745 702 615 641 stopcontrol 0;
-#X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 1 1
+#X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 0 1
 ;
-#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 0 1
+#X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 1 1
 ;
 #X obj 236 126 tgl 50 0 empty empty 2' 10 20 0 25 -261682 -1 -1 0 1
 ;
@@ -73,19 +73,19 @@
 #X obj 114 524 loadbang;
 #X obj 427 522 pack f f;
 #X obj 427 548 route 0;
-#X obj 427 576 + 128;
+#X obj 427 603 + 128;
 #X obj 121 730 print sampleplayer;
-#X obj 427 669 + 64;
-#X obj 427 722 pack f f f;
-#X msg 427 609 \$1 128;
-#X obj 524 537 vsl 15 128 0.1 10 1 1 empty empty release_intensity
-0 -9 0 10 -204800 -1 -1 6200 1;
-#X floatatom 524 673 5 0 0 0 - - -;
-#X obj 455 693 - 12;
-#X obj 484 671 *;
+#X obj 427 696 + 64;
+#X obj 427 749 pack f f f;
+#X msg 427 636 \$1 128;
+#X obj 524 564 vsl 15 128 0.1 10 1 1 empty empty release_intensity
+0 -9 0 10 -204800 -1 -1 11900 1;
+#X floatatom 524 700 5 0 0 0 - - -;
+#X obj 455 720 - 12;
+#X obj 484 698 *;
 #X msg 188 356 clear;
 #X msg 352 603 clear;
-#X obj 427 644 poly 64 1;
+#X obj 427 671 poly 64 1;
 #X obj 325 862 writesf~ 2;
 #X msg 43 790 open recording.wav;
 #X msg 43 815 start;
@@ -119,9 +119,11 @@
 #X connect 8 0 5 0;
 #X connect 9 0 0 0;
 #X restore 44 380 pd midi_registers;
-#X obj 301 699 print sampleplayerIN;
+#X obj 291 697 print sampleplayerIN;
 #X msg 122 605 read greenpositiv.txt cr;
 #X obj 302 446 - 0;
+#X obj 382 775 print sampleplayerINRelease;
+#X obj 427 576 mod 256;
 #X connect 0 0 4 0;
 #X connect 1 0 20 0;
 #X connect 1 1 20 1;
@@ -160,10 +162,11 @@
 #X connect 22 0 2 0;
 #X connect 24 0 7 0;
 #X connect 25 0 26 0;
-#X connect 26 0 27 0;
+#X connect 26 0 53 0;
 #X connect 27 0 31 0;
 #X connect 29 0 30 0;
 #X connect 30 0 6 0;
+#X connect 30 0 52 0;
 #X connect 31 0 38 0;
 #X connect 32 0 33 0;
 #X connect 32 0 35 1;
@@ -186,3 +189,4 @@
 #X connect 48 0 16 0;
 #X connect 50 0 12 0;
 #X connect 51 0 18 1;
+#X connect 53 0 27 0;

@@ -29,7 +29,6 @@ def do_instrument_blanchet(din, dout):
         for n, ffin in iterate_through_dir():
             ffout = os.path.join(dout, "%d.wav" % n)
             shutil.move(ffin, ffout)
-            # print >> out, "addsample %d 0.2" % (n, ffout)
             print("addsample %d %s" % (n, ffout), file=out)
 
 
@@ -37,6 +36,8 @@ def do_instrument_green_positiv(din, dout):
     # create mapping for Green Positiv organ from
     # https://piotrgrabowski.pl/green-positiv
     # (use the grandorgue file and unrar it)
+    # mapping is midinote + 256 * n_stop + 128 * is_release()
+    # (release only for stop 0)
     def iterate_through_dir():
         for stop, stopdir in enumerate(
             [
@@ -50,6 +51,13 @@ def do_instrument_green_positiv(din, dout):
                 if f.endswith(".wav"):
                     yield n, os.path.join(din, stopdir, f)
                     n += 1
+        n = 128 + 36
+        stopdir = 'Data - Green Positiv/TrakturaMan/R0'
+        for f in sorted(os.listdir(os.path.join(din, stopdir))):
+            if f.endswith(".wav"):
+                yield n, os.path.join(din, stopdir, f)
+                n += 1
+
 
     with open(os.path.join(dout, "../", "greenpositiv.txt"), "w") as out:
         for n, ffin in iterate_through_dir():
@@ -72,7 +80,6 @@ def do_instrument_green_positiv(din, dout):
                     ffout,
                 ]
             )
-            # shutil.copy(ffin, ffout)
             print("addsample %d %s" % (n, ffout), file=out)
 
 
