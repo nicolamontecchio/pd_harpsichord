@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import argparse
-import shutil
 import os
+import shutil
+import subprocess
 
 
 def do_instrument_blanchet(din, dout):
@@ -39,9 +40,9 @@ def do_instrument_green_positiv(din, dout):
     def iterate_through_dir():
         for stop, stopdir in enumerate(
             [
+                "Data - Green Positiv/M Flet kryty 8/A0",
+                "Data - Green Positiv/M Flet kryty 4/A0",
                 "Data - Green Positiv/M Pryncypal 2/A0",
-                "Data - Green Positiv/M Flet kryty 4",
-                "Data - Green Positiv/M Flet kryty 8",
             ]
         ):
             n = stop * 256 + 36
@@ -50,10 +51,28 @@ def do_instrument_green_positiv(din, dout):
                     yield n, os.path.join(din, stopdir, f)
                     n += 1
 
-    with open(os.path.join(dout, '../', "greenpositiv.txt"), "w") as out:
+    with open(os.path.join(dout, "../", "greenpositiv.txt"), "w") as out:
         for n, ffin in iterate_through_dir():
             ffout = os.path.join(dout, "%d.wav" % n)
-            shutil.copy(ffin, ffout)
+            # convert samplerate!
+            subprocess.run(
+                [
+                    "ffmpeg",
+                    "-hide_banner",
+                    "-loglevel",
+                    "panic",
+                    "-i",
+                    ffin,
+                    "-ar",
+                    "44100",
+                    "-ac",
+                    "2",
+                    "-sample_fmt",
+                    "s16",
+                    ffout,
+                ]
+            )
+            # shutil.copy(ffin, ffout)
             print("addsample %d %s" % (n, ffout), file=out)
 
 

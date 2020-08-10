@@ -1,10 +1,10 @@
-#N canvas 1344 466 679 1019 10;
+#N canvas 1155 446 679 1019 10;
 #N canvas 745 702 615 641 stopcontrol 0;
 #X obj 116 126 tgl 50 0 empty empty 8' 10 20 0 25 -261682 -1 -1 1 1
 ;
 #X obj 176 126 tgl 50 0 empty empty 4' 10 20 0 25 -261682 -1 -1 0 1
 ;
-#X obj 236 126 tgl 50 0 empty empty L 10 20 0 25 -261682 -1 -1 0 1
+#X obj 236 126 tgl 50 0 empty empty 2' 10 20 0 25 -261682 -1 -1 0 1
 ;
 #X obj 116 218 route 1 0;
 #X msg 116 245 stopon 0;
